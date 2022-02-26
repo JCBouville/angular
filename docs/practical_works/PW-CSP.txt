@@ -1,0 +1,33 @@
+PW - CSP
+
+1 - Starter Content Security Policy
+    
+    a) Configure a minimalistic CSP with the following value and observe the result (see console log) : "default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; style-src 'self';"
+       Hints : 
+          - This policy allows images, scripts, AJAX, and CSS from the same origin, and does not allow any other resources to load (eg inline scripting, inline styles, object, frame, media, etc). It is a good starting point but often too restrictive for many existing sites
+          - You can declare your CSP as a meta tag with "http-equiv" directive in index.html : <meta http-equiv="__directive__" content="__value__">
+    
+    b) Update step by step the configuration in order to make the website load properly (Content-Security-Policy-Report-Only header)
+       Hint : See https://content-security-policy.com/ for more details on existing CSP directives
+        
+    c) Check the security level of this CSP on https://csp-evaluator.withgoogle.com/
+    
+    d) Declare the CSP server-side     
+       Hints : 
+          - Use the spring security API HttpSecurity : HttpSecurity#headers()#contentSecurityPolicy("...") 
+          - Set the CSP configuration in /bookstore/src/main/java/com/worldline/bookstore/config/SecurityConfiguration.java
+          - Bypass the angular-cli proxy in order to use the server-side CSP configuration ('ng build', then use http://localhost:8080/#/home)     
+    
+2 - Configure a CSP 3
+    
+    a) Use CSP to secure your app against inline scripting
+       - In index.html, declare an arbitrary inline scripting : "<script>document.write('<h1>Inline scripting is <b>not recommended</b>! But if you have not the choice, <b>secure your app with CSP</b></h1>');</script>" 
+       - Update the CSP in order to block the inline scripting.
+       - Update the CSP in order to allow this inline scripting in a secure way (consider CSP3 SHA-256 hash syntax)
+       
+       Hints : 
+          - To generate the hash, use this online tool : https://report-uri.io/home/hash (beware to spaces and carriage returns...)
+    
+    b) Check the security level of this CSP on https://csp-evaluator.withgoogle.com/ 
+ 
+ 

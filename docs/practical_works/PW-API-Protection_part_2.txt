@@ -1,0 +1,34 @@
+PW API-Protection (Part 2)
+
+Configure CORS
+
+1 - Protect your API against other domains  
+    
+    CORS is effective only in case of cross-origin requests.
+    To simulate a cross-origin request, we will use 2 instances of the same webapp, running on 2 different ports.
+    The main webapp will run on a given instance (origin), on port 9000, while "news" API will be hosted in the other instance (host), on port 8080 :
+    
+    a) Modify app/src/services/newsService.ts, in "getNews()" function, update the existing request "api/news" 
+        - Use an absolute url with the port 8080 
+        - Explicit the "Content-Type" header for the request 
+        - Stop 'ng serve' process (if any) and launch 'ng build' command to update the 'dist' repo (needed for the next steps)
+     
+     Hint : to set a header for a request, use a Headers object and pass it as a second param of the http#get method
+     
+          let headers = new Headers({'Content-Type': 'application/json'});
+          return this.http.get(_url_, {headers: headers}) 
+            
+    b) Launch a second server in a different port : mvn -Drun.arguments="--server.port=9000" and access to corresponding home page http://localhost:9000/#/home
+    c) What's the result ? Why ? Observe the client console. 
+    
+    Hint : Read about Single Origin Policy(SOP)
+    
+2 - Allow cross-origin requests
+   
+    a) Configure CORS in order to allow cross-origin request from localhost only (choose the right port)
+    b) Observe the network traffic - Look for CORS headers for the "api/news" request/response
+  
+    Hint : 
+      - To enable CORS, see bookstore/src/main/resources/config/application.yml
+      - To authorize an HTTP method for a API, use  HttpSecurity#authorizeRequests().antMatchers(HttpMethod.OPTIONS, "/**").permitAll()    
+   
